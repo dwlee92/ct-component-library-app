@@ -2,6 +2,8 @@
 
 Component Library Documentation: http://si.captech.site/ct-react-library/
 
+`Fork` this project to begin creating an application with the Component Library!
+
 ------------------------------------------------------------------------------------------------------------------------------
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
