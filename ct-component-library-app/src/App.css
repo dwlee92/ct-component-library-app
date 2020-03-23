@@ -1,4 +1,4 @@
-.App {
+.app {
   text-align: center;
   font-family: "Nunito Sans", -apple-system, ".SFNSText-Regular",
     "San Francisco", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica,
@@ -33,13 +33,4 @@
 
 .button {
   padding-top: 20px;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

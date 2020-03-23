@@ -9,7 +9,7 @@ const cn = classNames.bind(styles);
 
 function App() {
   return (
-    <div className="App">
+    <div className="app">
       <div>
         <p className={cn({ header: true })}>
           CapTech Component Library Documentation (accessible on CapTech Network
