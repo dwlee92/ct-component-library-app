@@ -1,0 +1,45 @@
+.App {
+  text-align: center;
+  font-family: "Nunito Sans", -apple-system, ".SFNSText-Regular",
+    "San Francisco", BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+}
+
+.link {
+  color: blue;
+}
+
+.link:visited {
+  color: blue;
+}
+
+.header {
+  font-size: 20px;
+}
+
+.row {
+  display: inline-block;
+}
+
+.alert {
+  position: relative;
+  width: 290px;
+}
+
+.textInput {
+  display: inline-block;
+  text-align: left;
+}
+
+.button {
+  padding-top: 20px;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
