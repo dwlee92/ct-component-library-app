@@ -16,9 +16,9 @@ function App() {
           or VPN):{" "}
           <a
             className={cn({ link: true })}
-            href="http://si.captech.site/ct-react-library/?"
+            href="http://si.captech.site/ct-react-library/"
           >
-            http://si.captech.site/ct-react-library/?
+            http://si.captech.site/ct-react-library/
           </a>
         </p>
       </div>
