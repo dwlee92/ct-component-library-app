@@ -1,4 +1,4 @@
-# CT Component Library Application
+# CapTech Component Library Application
 
 Component Library Documentation: http://si.captech.site/ct-react-library/
 
