@@ -1,83 +1,153 @@
 import React from "react";
-import * as styles from "./App.css";
-
+import { Link, BrowserRouter, Switch, Route } from "react-router-dom";
+import { CtResponsiveNav, CtHeader } from "@captech/ct-react-library";
 import classNames from "classnames/bind";
+import FrontPage from "./routes/FrontPage";
+import AccountPage from "./routes/AccountPage";
+import { frontPageData } from "./utils/dataGenerator";
 
-import { CtButton, CtAlert, CtInput } from "@captech/ct-react-library";
+import * as styles from "./App.css";
 
 const cn = classNames.bind(styles);
 
-function App() {
-  return (
-    <div className="app">
-      <div>
-        <p className={cn({ header: true })}>
-          CapTech Component Library Documentation (accessible on CapTech Network
-          or VPN): <br></br>
-          <a
-            className={cn({ link: true })}
-            href="http://si.captech.site/ct-react-library/"
-          >
-            http://si.captech.site/ct-react-library/
-          </a>
-        </p>
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = frontPageData;
+  }
+  render() {
+    const HydratedFrontpage = (props) => {
+      return (
+        <FrontPage
+          {...props}
+          frontPageData={this.state}
+          submitComment={this.submitComment}
+          submitPost={this.submitPost}
+        />
+      );
+    };
+
+    return (
+      <div className="app">
+        <BrowserRouter>
+          <header>
+            <CtHeader>
+              <CtResponsiveNav bp="(min-width: 850px)">
+                <a href="https://captechconsulting.com/">
+                  <img
+                    src="/captech.png"
+                    alt="CapTech Logo"
+                    className={cn({ logo: true })}
+                  ></img>
+                </a>
+                <Link to="/">Home</Link>
+                <Link
+                  to={{
+                    pathname: `/user/${frontPageData.userData.userName}`,
+                    state: {
+                      userData: frontPageData.userData,
+                    },
+                  }}
+                >
+                  My Account
+                </Link>
+              </CtResponsiveNav>
+            </CtHeader>
+          </header>
+          <Switch>
+            <Route path="/user/:userName" component={AccountPage} />
+            <Route path="/" render={HydratedFrontpage} />
+          </Switch>
+        </BrowserRouter>
       </div>
-      <div>
-        <p className={cn({ header: true })}>
-          Please provide feedback on your experience by filling out{" "}
-          <a
-            className={cn({ link: true })}
-            href="https://teams.microsoft.com/_?tenantId=ae9d6e9a-cc18-4204-ac29-43a0ccb860e8#/tab::c58eadc6-6a68-43bd-95fb-112c48ebaed7/Component%20Library%20Feedback?threadId=19:df9128676cd640eea561ed01e0528bff@thread.skype&ctx=channel"
-          >
-            this Component Usability Feedback survey on Teams
-          </a>{" "}
-          and also please feel free to post any feedback in{" "}
-          <a
-            className={cn({ link: true })}
-            href="https://teams.microsoft.com/l/channel/19%3adf9128676cd640eea561ed01e0528bff%40thread.skype/Component%2520Library%2520Feedback?groupId=cc19cb29-06a2-48e4-adcc-b6e4a8fe7dfa&tenantId=ae9d6e9a-cc18-4204-ac29-43a0ccb860e8"
-          >
-            the Component Usability Teams channel
-          </a>
-          .
-        </p>
-      </div>
-      <p className={cn({ header: true })}>
-        <b> Sample components: </b>
-      </p>
-      <div>
-        <div className={cn({ row: true, alert: true })}>
-          <CtAlert type={"success"}>Success</CtAlert>
-        </div>
-      </div>
-      <div>
-        <div className={cn({ row: true, textInput: true })}>
-          <CtInput
-            readOnly={false}
-            disabled={false}
-            success={false}
-            error={false}
-            required={false}
-            label="Label"
-            placeholder="Placeholder"
-            caption="Caption"
-          />
-        </div>
-      </div>
-      <div>
-        <div className={cn({ row: true, button: true })}>
-          <CtButton
-            primary={true}
-            disabled={false}
-            disabledLight={false}
-            large={false}
-            small={false}
-          >
-            Button
-          </CtButton>
-        </div>
-      </div>
-    </div>
-  );
+    );
+  }
+
+  submitComment = (comment, parent) => {
+    const { userData } = this.state;
+    comment.user = userData;
+
+    let postIndex = -1;
+    if (parent) {
+      postIndex = this.state.posts.findIndex(
+        (x) => x.postData.id === parent.id
+      );
+    } else {
+      let parentId = -1;
+      this.state.posts.forEach((x) => {
+        if (x.postData.comments) {
+          x.postData.comments.forEach((c) => {
+            if (c.id === comment.id) {
+              parentId = x.postData.id;
+            }
+          });
+        }
+      });
+      postIndex = this.state.posts.findIndex((x) => x.postData.id === parentId);
+    }
+
+    if (postIndex < 0) {
+      console.error("error");
+    } else {
+      let commentIndex = this.state.posts[
+        postIndex
+      ].postData.comments.findIndex((x) => x.id === comment.id);
+      let newPost = this.state.posts[postIndex];
+
+      if (commentIndex < 0) {
+        newPost.postData.comments.push(comment);
+      } else if (comment.isDeleted) {
+        newPost.comments = newPost.postData.comments.splice(commentIndex);
+      } else {
+        newPost.postData.comments[commentIndex] = comment;
+      }
+      this.setState((prevState) => ({
+        ...prevState,
+        posts: [
+          ...prevState.posts.slice(0, postIndex),
+          newPost,
+          ...prevState.posts.slice(postIndex + 1),
+        ],
+      }));
+    }
+  };
+
+  submitPost = (post) => {
+    const { userData } = this.state;
+    post.postData.user = userData;
+
+    let postIndex = this.state.posts.findIndex(
+      (x) => x.postData.id === post.postData.id
+    );
+
+    if (post.postData.isDeleted) {
+      this.setState((prevState) => ({
+        ...prevState,
+        posts: [
+          ...prevState.posts.slice(0, postIndex),
+          ...prevState.posts.slice(postIndex + 1),
+        ],
+      }));
+    } else {
+      if (postIndex < 0) {
+        this.setState((prevState) => ({
+          ...prevState,
+          posts: [post, ...prevState.posts],
+        }));
+      } else {
+        post.postData.isEdited = true;
+        this.setState((prevState) => ({
+          ...prevState,
+          posts: [
+            ...prevState.posts.slice(0, postIndex),
+            post,
+            ...prevState.posts.slice(postIndex + 1),
+          ],
+        }));
+      }
+    }
+  };
 }
 
 export default App;

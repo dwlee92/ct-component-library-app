@@ -1,0 +1,43 @@
+.profileAvatarCircle {
+  align-self: center;
+  border-radius: 500px;
+  margin-right: 1.5em;
+  border: 2px solid #333;
+  box-shadow: inset 0 0 10px black, 0 4px 8px rgba(0, 0, 0, 0.4);
+  max-width: 300px;
+  z-index: 2;
+}
+
+.userContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileInfoContainer {
+  margin-top: -4em;
+  padding: 5em 1.5em 1.5em 1.5em;
+  align-self: center;
+  max-width: 700px;
+  background: white;
+  box-shadow: 4px 3px 14px -6px rgba(0, 0, 0, 0.86);
+}
+
+.profileInfoContainer h1 {
+  text-align: center;
+}
+
+.profileInfoContainer p {
+  line-height: 1.6em;
+}
+
+.profileInfoContainer a {
+  color: blue;
+}
+
+.profileInfoContainer h3:first-of-type {
+  margin-top: 1.5em;
+}
+
+.profileInfoContainer h3:not(:first-of-type) {
+  margin-top: 2.5em;
+}
